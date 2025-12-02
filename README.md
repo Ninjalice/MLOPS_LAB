@@ -1,14 +1,19 @@
-# MLOps Lab 1 - Image Classification System
+# MLOps Labs 1 & 2 - Image Classification System
 
-![CI Pipeline](https://github.com/Ninjalice/MLOPS_LAB/actions/workflows/ci.yml/badge.svg)
+![CI/CD Pipeline](https://github.com/Ninjalice/MLOPS_LAB/actions/workflows/ci.yml/badge.svg)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-mlops--lab2-blue?logo=docker)](https://hub.docker.com/r/yourusername/mlops-lab2)
+[![HuggingFace Space](https://img.shields.io/badge/🤗%20HuggingFace-Space-yellow)](https://huggingface.co/spaces/yourusername/mlops-lab2)
 
 ## 📋 Project Overview
 
-This project implements an **Image Classification System** with a complete MLOps pipeline using GitHub Actions for Continuous Integration. The system provides functionality for image classification, resizing, and preprocessing through three interfaces:
+This project implements an **Image Classification System** with a complete **CI/CD pipeline** using GitHub Actions for Continuous Integration and Continuous Delivery. The system provides functionality for image classification, resizing, and preprocessing through multiple interfaces:
 
 - **Logic Module**: Core functionality for image processing and classification
 - **CLI**: Command-line interface for local operations
 - **API**: RESTful API built with FastAPI for web-based interactions
+- **Docker**: Containerized deployment for reproducibility
+- **Gradio GUI**: User-friendly web interface hosted on HuggingFace Spaces
+- **Cloud Deployment**: API hosted on Render
 
 ## 🎯 Features
 
@@ -52,12 +57,60 @@ MLOPS_LAB/
 └── Lab1.pdf                    # Assignment document
 ```
 
-## 🚀 Getting Started
+## � Docker Deployment
+
+### Building the Docker Image
+
+```bash
+docker build -t mlops-lab2 .
+```
+
+### Running the Container
+
+```bash
+docker run -p 8000:8000 mlops-lab2
+```
+
+The API will be available at `http://localhost:8000`.
+
+### Multi-Stage Build Details
+
+The Dockerfile uses a multi-stage build for optimization:
+- **Base Stage**: Python 3.13-slim foundation with system dependencies
+- **Builder Stage**: Installs Python dependencies using uv
+- **Runtime Stage**: Minimal final image (< 200MB) with only runtime dependencies
+
+## ☁️ Cloud Deployments
+
+### Render (API Hosting)
+
+The API is automatically deployed to Render via GitHub Actions on every push to `main`.
+
+- **Live API**: https://mlops-lab2.onrender.com
+- **Auto-Deploy**: Triggered by GitHub Actions workflow
+- **Setup Required**: 
+  1. Create a Render web service
+  2. Connect to your Docker Hub repository
+  3. Add `RENDER_DEPLOY_HOOK_KEY` to GitHub secrets
+
+### HuggingFace Spaces (GUI)
+
+Interactive Gradio GUI hosted on HuggingFace Spaces.
+
+- **Live Demo**: https://huggingface.co/spaces/yourusername/mlops-lab2
+- **Features**: Upload images, get predictions, view results
+- **Auto-Deploy**: Synced via GitHub Actions on push to `main`
+- **Setup Required**:
+  1. Create a HuggingFace Space
+  2. Add `HF_USERNAME` and `HF_TOKEN` to GitHub secrets
+
+## �🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.9 or higher
 - [uv](https://github.com/astral-sh/uv) package manager
+- Docker (optional, for containerized deployment)
 
 ### Installation
 
@@ -154,10 +207,11 @@ make clean      # Clean up generated files
 - **Linting**: Pylint
 - **Testing**: Pytest with coverage reporting
 
-## 🔄 Continuous Integration
+## 🔄 CI/CD Pipeline
 
-This project uses GitHub Actions for CI/CD. The pipeline automatically:
+This project uses GitHub Actions for complete CI/CD automation with three main jobs:
 
+### 1. Build & Test (CI)
 1. Checks out the code
 2. Sets up Python environment
 3. Installs dependencies with uv
@@ -166,9 +220,26 @@ This project uses GitHub Actions for CI/CD. The pipeline automatically:
 6. Runs tests with Pytest
 7. Uploads coverage reports
 
-The CI pipeline is triggered on:
-- Push to `main` or `develop` branches
-- Pull requests to `main` or `develop` branches
+### 2. Deploy API (CD)
+1. Builds Docker image with multi-stage optimization
+2. Pushes image to Docker Hub
+3. Triggers Render deployment via webhook
+
+### 3. Deploy HuggingFace Space (CD)
+1. Checks out orphan `hf-space` branch
+2. Copies Gradio app and requirements
+3. Pushes to HuggingFace Spaces repository
+
+### Pipeline Triggers
+- **Push to `main`**: Full CI/CD (test + deploy)
+- **Pull requests to `main` or `develop`**: CI only (test)
+
+### Required GitHub Secrets
+- `DOCKERHUB_USERNAME`: Your Docker Hub username
+- `DOCKERHUB_TOKEN`: Docker Hub personal access token
+- `RENDER_DEPLOY_HOOK_KEY`: Render deploy hook URL key
+- `HF_USERNAME`: HuggingFace username
+- `HF_TOKEN`: HuggingFace write access token
 
 ## 📦 Dependencies
 
@@ -189,19 +260,30 @@ The CI pipeline is triggered on:
 
 ## 📝 Assignment Requirements
 
-This project fulfills all requirements for MLOps Lab 1:
-
+### Lab 1: Continuous Integration ✅
 ✅ Machine learning project structure with incremental methodology  
 ✅ Logic module with image classification and preprocessing  
 ✅ Command-line interface (CLI) using Click  
 ✅ RESTful API using FastAPI  
-✅ Comprehensive test suite for all components  
+✅ Comprehensive test suite for all components (41 tests, 94% coverage)  
 ✅ Virtual environment management with uv  
 ✅ HTML homepage for API  
 ✅ Makefile for automation (install, lint, format, test)  
-✅ CI/CD pipeline with GitHub Actions  
+✅ CI pipeline with GitHub Actions  
 ✅ Status badge in README  
 ✅ Proper project documentation  
+
+### Lab 2: Continuous Delivery ✅
+✅ Multi-stage Dockerfile (base, builder, runtime)  
+✅ Docker image optimization (< 200MB)  
+✅ Healthcheck in Docker container  
+✅ API deployment to Render web service  
+✅ Gradio GUI on HuggingFace Spaces  
+✅ Automated deployments via GitHub Actions  
+✅ Docker Hub integration  
+✅ GitHub secrets for secure credentials  
+✅ CD pipeline triggered on push to main  
+✅ Documentation for all deployment platforms  
 
 ## 👥 Authors
 
@@ -218,4 +300,3 @@ This project is part of the MLOps course at UPNA (Universidad Pública de Navarr
 
 ---
 
-**Note**: In this initial version (Lab 1), the image classification uses random prediction. Future labs will implement actual deep learning models for real image classification.

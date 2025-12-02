@@ -153,5 +153,3 @@ Thumbs.db
 !templates/*.png
 !templates/*.jpg
 
-# UV
-uv.lock

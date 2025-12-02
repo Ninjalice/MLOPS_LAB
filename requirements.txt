@@ -1,5 +1,2 @@
-gradio==4.29.0
-gradio-client==0.16.1
-Pillow
-requests
-huggingface_hub<0.23.0
+gradio>=3.40
+requests>=2.30

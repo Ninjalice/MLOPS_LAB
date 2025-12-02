@@ -2,7 +2,6 @@
 
 import gradio as gr
 import requests
-from PIL import Image
 import io
 
 # API URL - Replace with your Render deployment URL

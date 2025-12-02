@@ -48,7 +48,7 @@ def predict_image(image):
 
 
 # Create Gradio interface
-with gr.Blocks(title="Image Classification - MLOps Lab 2", theme=gr.themes.Soft()) as demo:
+with gr.Blocks(title="Image Classification - MLOps Lab 2") as demo:
     gr.Markdown(
         """
         # 🖼️ Image Classification System

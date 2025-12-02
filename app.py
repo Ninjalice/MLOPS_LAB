@@ -108,6 +108,5 @@ with gr.Blocks(title="Image Classification - MLOps Lab 2", theme=gr.themes.Soft(
         outputs=output_text
     )
 
-# Launch the app
-if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0",  share=True, server_port=7860)
+
+demo.launch()

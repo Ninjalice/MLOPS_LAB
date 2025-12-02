@@ -140,7 +140,7 @@ cython_debug/
 *.swp
 *.swo
 *~
-
+*.pdf
 # OS
 .DS_Store
 Thumbs.db
